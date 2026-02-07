@@ -1,0 +1,155 @@
+/* Sound Wave Animation */
+.sound-wave {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    height: 40px;
+    padding: 0 8px;
+}
+
+.sound-wave .bar {
+    width: 4px;
+    height: 8px;
+    background: linear-gradient(180deg, #ef4444 0%, #f97316 50%, #eab308 100%);
+    border-radius: 2px;
+    animation: soundWave 1s ease-in-out infinite;
+}
+
+.sound-wave .bar:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.sound-wave .bar:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.sound-wave .bar:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.sound-wave .bar:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+.sound-wave .bar:nth-child(5) {
+    animation-delay: 0.4s;
+}
+
+@keyframes soundWave {
+
+    0%,
+    100% {
+        height: 8px;
+        opacity: 0.5;
+    }
+
+    50% {
+        height: 28px;
+        opacity: 1;
+    }
+}
+
+/* Paused state */
+.sound-wave.paused .bar {
+    animation-play-state: paused;
+    opacity: 0.4;
+    height: 12px;
+}
+
+/* Large version for RecorderPanel */
+.sound-wave-large {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 80px;
+    padding: 16px;
+}
+
+.sound-wave-large .bar {
+    width: 8px;
+    height: 16px;
+    background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    border-radius: 4px;
+    animation: soundWaveLarge 0.8s ease-in-out infinite;
+}
+
+.sound-wave-large .bar:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.sound-wave-large .bar:nth-child(2) {
+    animation-delay: 0.08s;
+}
+
+.sound-wave-large .bar:nth-child(3) {
+    animation-delay: 0.16s;
+}
+
+.sound-wave-large .bar:nth-child(4) {
+    animation-delay: 0.24s;
+}
+
+.sound-wave-large .bar:nth-child(5) {
+    animation-delay: 0.32s;
+}
+
+.sound-wave-large .bar:nth-child(6) {
+    animation-delay: 0.4s;
+}
+
+.sound-wave-large .bar:nth-child(7) {
+    animation-delay: 0.48s;
+}
+
+@keyframes soundWaveLarge {
+
+    0%,
+    100% {
+        height: 16px;
+        opacity: 0.4;
+    }
+
+    50% {
+        height: 56px;
+        opacity: 1;
+    }
+}
+
+.sound-wave-large.paused .bar {
+    animation-play-state: paused;
+    opacity: 0.3;
+    height: 20px;
+}
+
+/* Pulse ring effect for recording indicator */
+.recording-pulse {
+    position: relative;
+}
+
+.recording-pulse::before,
+.recording-pulse::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(239, 68, 68, 0.4);
+    animation: pulse-ring 1.5s ease-out infinite;
+}
+
+.recording-pulse::after {
+    animation-delay: 0.5s;
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+}
