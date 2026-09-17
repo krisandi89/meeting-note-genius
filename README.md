@@ -1,103 +1,119 @@
-# MeetingGenius Pro
+# MeetingGenius Pro v2.5
 
-AI-Powered Meeting Recording & Summarization App
+**AI-Powered Live Meeting Transcription & Instant Notes Generator**
 
-![MeetingGenius Pro](https://img.shields.io/badge/Version-1.0.0-blue) ![React](https://img.shields.io/badge/React-18-61DAFB) ![Vite](https://img.shields.io/badge/Vite-5-646CFF) ![Tailwind](https://img.shields.io/badge/Tailwind-4-38B2AC)
+![MeetingGenius Pro](https://img.shields.io/badge/Version-2.5.0-blue) ![React](https://img.shields.io/badge/React-19-61DAFB) ![Vite](https://img.shields.io/badge/Vite-7-646CFF) ![Tailwind](https://img.shields.io/badge/Tailwind-4-38B2AC) ![Gemini](https://img.shields.io/badge/Gemini-2.5_Flash-orange)
 
-## Features
+MeetingGenius Pro adalah aplikasi web modern untuk merekam, mentranskripsikan pembicaraan rapat secara *real-time*, dan langsung menghasilkan **Notulen Rapat Lengkap (Meeting Minutes)** terstruktur profesional menggunakan model kecerdasan buatan terbaru **Google Gemini 2.5 Flash** (dengan API gratis dari Google AI Studio).
 
-- 🎙️ **Live Transcription** - Real-time speech-to-text using Web Speech API
-- ⏸️ **Pause/Resume** - Control recording flow without losing context
-- 🔖 **Mark Moments** - Bookmark important discussion points with custom labels
-- 📄 **PDF References** - Upload documents for AI context
-- 🖼️ **Image Support** - Include images in multimodal AI analysis
-- 🤖 **Gemini AI Summary** - Generate professional meeting notes
-- 📋 **Notion/Docs Export** - Copy-paste friendly output formats
-- 🌙 **Dark/Light Theme** - System preference detection
+---
 
-## Quick Start
+## 🚀 Fitur Utama
 
-### 1. Get API Key
-Visit [Google AI Studio](https://aistudio.google.com/apikey) and create a free Gemini API key.
+- 🎙️ **Transkripsi Suara Real-time** - Pengenalan suara langsung menggunakan Web Speech API dengan auto-reconnect dan deteksi suara terus-menerus.
+- 🌐 **Pemilih Bahasa Rapat Cepat** - Ganti bahasa rapat langsung dari Header (🇮🇩 Bahasa Indonesia `id-ID`, 🇺🇸 English `en-US`, atau 🌐 Bilingual `ID + EN`).
+- ⏸️ **Jeda & Lanjutkan (Pause/Resume)** - Kontrol rekaman rapat tanpa kehilangan konteks transkrip.
+- 🔖 **Penanda Momen (Bookmark)** - Beri tanda pada momen krusial (misal: *"Diskusi Anggaran"*, *"Keputusan Direksi"*), yang otomatis dijadikan fokus prioritas oleh AI.
+- ⚡ **Notulen Langsung dengan Gemini 2.5 Flash** - Buat notulen rapat komprehensif langsung di dalam aplikasi dalam hitungan detik tanpa perlu membuka aplikasi lain.
+- 📋 **Dual Mode (Otomatis & Salin Manual)** - Tersedia tab **Gemini Flash** (otomatis via API) serta tab **Salin Manual** (prompt siap pakai untuk ChatGPT / Claude).
+- 📥 **Ekspor & Unduh Mudah** - Salin format Markdown siap pakai untuk Notion/Obsidian atau unduh langsung sebagai file `.md` dan `.txt`.
+- 🔒 **Privasi Terjamin & 100% Client-Side** - Kunci API dan transkrip disimpan lokal di memori peramban Anda (`localStorage`), tidak ada perantara backend server.
+- 🌙 **Tema Gelap / Terang / Sistem** - Antarmuka modern *glassmorphism* yang nyaman di mata dengan pendeteksi otomatis preferensi OS.
+- 🍏 **Peluncur Cepat macOS (`start.command`)** - Cukup klik dua kali file `start.command` untuk langsung menjalankan server dan membuka peramban otomatis.
 
-### 2. Install & Run
+---
+
+## 📋 Struktur Notulen yang Dihasilkan
+
+AI menyusun notulen rapat secara mendalam dengan format Markdown profesional:
+1. **Judul Rapat Spesifik & Tanggal Pelaksanaan**
+2. **Ringkasan Eksekutif** (2-3 paragraf intisari rapat)
+3. **Poin-poin Diskusi Utama** (Terinci dengan topik dan argumen)
+4. **Keputusan yang Disepakati** (Kebijakan dan hasil final)
+5. **Tabel Action Items** (No, Tugas, PIC / Penanggung Jawab, Deadline, Prioritas, Status)
+6. **Risiko & Hambatan (Risks & Blockers)**
+7. **Pertanyaan Terbuka & Langkah Selanjutnya**
+
+---
+
+## ⚡ Panduan Cepat (Quick Start)
+
+### 1. Dapatkan Gemini API Key Gratis
+1. Kunjungi [Google AI Studio (aistudio.google.com/apikey)](https://aistudio.google.com/apikey).
+2. Buat API Key gratis (Free Tier).
+3. Salin API Key Anda.
+
+### 2. Jalankan Aplikasi
+Di macOS:
+- Cukup **klik dua kali** file `start.command` di folder proyek ini.
+
+Atau melalui Terminal:
 ```bash
-# Install dependencies
+# Pasang dependensi
 npm install
 
-# Start dev server
+# Jalankan server pengembangan
 npm run dev
 ```
 
-### 3. Open in Browser
-Navigate to `http://localhost:5173` (use Chrome or Edge for best results)
+Buka peramban di `http://localhost:5173` (Gunakan **Google Chrome** atau **Microsoft Edge** untuk performa Web Speech API terbaik).
 
-### 4. Configure
-1. Click the ⚙️ Settings icon
-2. Paste your Gemini API key
-3. Click Save
+### 3. Masukkan API Key di Aplikasi
+1. Klik tombol **⚙️ Pengaturan** di bagian kanan atas (Header).
+2. Tempelkan Google Gemini API Key Anda.
+3. Klik **"Tes Koneksi Kunci"** untuk memastikan API aktif.
+4. Klik **"Simpan Pengaturan"**.
 
-### 5. Start Recording
-1. Click "Mulai Rapat" to begin
-2. Speak in Indonesian (default) or change language in settings
-3. Use "Tandai" to mark important moments
-4. Click "Stop" when finished
-5. Click "Generate" to create AI summary
+### 4. Mulai Rapat & Generate Notulen
+1. Pilih bahasa rapat di Header (`🇮🇩 ID` atau `🇺🇸 EN`).
+2. Klik tombol **"Mulai Meeting"** dan izinkan akses mikrofon.
+3. Gunakan tombol **"Tandai"** jika ada keputusan atau topik penting.
+4. Klik **"Stop"** setelah rapat selesai.
+5. Di panel kanan, klik **"✨ Buat Notulen (Gemini Flash 2.5)"**.
+6. Notulen akan langsung tersusun rapi! Anda bisa klik **"Salin Notulen (.md)"** atau **"Unduh File .md"**.
 
-## Output Format
+---
 
-The AI generates structured meeting notes with:
-- **Executive Summary** - Brief overview
-- **Key Discussion Points** - Main topics covered
-- **Decisions** - What was decided
-- **Action Items** - Tasks with owner, due date, priority
-- **Risks & Blockers** - Potential issues
-- **Next Steps** - Follow-up actions
-- **Open Questions** - Unresolved items
+## 🌐 Kompatibilitas Peramban (Browser Support)
 
-## Export Options
+| Peramban | Status Web Speech API | Rekomendasi |
+|---|---|---|
+| **Google Chrome** | ✅ Mendukung Penuh | ⭐️ Sangat Direkomendasikan |
+| **Microsoft Edge** | ✅ Mendukung Penuh | ⭐️ Sangat Direkomendasikan |
+| **Brave / Opera** | ✅ Mendukung (Chromium) | Direkomendasikan |
+| **Mozilla Firefox** | ⚠️ Terbatas | Gunakan fitur "Impor Transkrip Manual" |
+| **Apple Safari** | ⚠️ Terbatas | Gunakan fitur "Impor Transkrip Manual" |
 
-- **Copy JSON** - Raw structured data
-- **Copy for Notion** - Markdown with tables
-- **Copy for Google Docs** - Plain text format
+---
 
-## Privacy
+## 🛠️ Tech Stack
 
-- ❌ No audio recording or storage
-- ✅ Transcript stays in browser memory
-- ✅ API key stored in sessionStorage (cleared on browser close)
-- ✅ Optional local storage for summaries only
+- **Framework:** React 19 + Vite 7
+- **Styling:** Tailwind CSS 4 (`@tailwindcss/vite`) + Custom Glassmorphism CSS
+- **Icons:** Lucide React
+- **AI Engine:** Google Gemini 2.5 Flash REST API (Direct client-to-API via Google AI Studio)
+- **Speech Engine:** Web Speech API (`webkitSpeechRecognition` / `SpeechRecognition`)
 
-## Browser Support
+---
 
-| Browser | Status |
-|---------|--------|
-| Chrome | ✅ Full support |
-| Edge | ✅ Full support |
-| Firefox | ⚠️ Limited (manual transcript import) |
-| Safari | ⚠️ Limited (manual transcript import) |
-
-## Tech Stack
-
-- React 18 + Vite
-- Tailwind CSS 4
-- Lucide React Icons
-- PDF.js for document extraction
-- Google Gemini API
-
-## Development
+## 📜 Skrip Proyek
 
 ```bash
-# Development
+# Menjalankan dev server
 npm run dev
 
-# Build
+# Memeriksa kualitas kode & ESLint (0 errors)
+npm run lint
+
+# Membangun versi produksi
 npm run build
 
-# Preview production build
+# Meninjau build produksi lokal
 npm run preview
 ```
 
-## License
+---
 
-MIT
+## 📄 Lisensi
+
+MIT License

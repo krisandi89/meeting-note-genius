@@ -32,7 +32,7 @@ export function parseJsonSafely(text) {
     try {
         const data = JSON.parse(text);
         return { success: true, data, error: null };
-    } catch (e) {
+    } catch {
         // Continue to next strategy
     }
 
@@ -41,7 +41,7 @@ export function parseJsonSafely(text) {
         const cleaned = cleanJsonString(text);
         const data = JSON.parse(cleaned);
         return { success: true, data, error: null };
-    } catch (e) {
+    } catch {
         // Continue to next strategy
     }
 

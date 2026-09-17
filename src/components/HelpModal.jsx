@@ -42,9 +42,9 @@ export default function HelpModal({ isOpen, onClose }) {
                             <li className="flex gap-3">
                                 <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[var(--color-accent-primary)] text-white text-xs font-bold shrink-0">1</span>
                                 <div>
-                                    <p className="font-medium">Mulai Merekam</p>
+                                    <p className="font-medium">Pilih Bahasa & Mulai Merekam</p>
                                     <p className="text-sm text-[var(--color-text-secondary)]">
-                                        Klik "Mulai Meeting" dan izinkan akses mikrofon. Transkripsi akan berjalan otomatis.
+                                        Pilih bahasa di Header (🇮🇩 ID, 🇺🇸 EN, atau 🌐 Bilingual), klik "Mulai Meeting", dan transkripsi suara akan berjalan real-time.
                                     </p>
                                 </div>
                             </li>
@@ -53,25 +53,25 @@ export default function HelpModal({ isOpen, onClose }) {
                                 <div>
                                     <p className="font-medium">Tandai Momen Penting</p>
                                     <p className="text-sm text-[var(--color-text-secondary)]">
-                                        Gunakan tombol "Tandai" untuk menandai bagian penting seperti keputusan atau action items.
+                                        Gunakan tombol "Tandai" untuk menandai bagian penting seperti keputusan, action items, atau kendala diskusi.
                                     </p>
                                 </div>
                             </li>
                             <li className="flex gap-3">
                                 <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[var(--color-accent-primary)] text-white text-xs font-bold shrink-0">3</span>
                                 <div>
-                                    <p className="font-medium">Stop & Copy ke AI</p>
+                                    <p className="font-medium">Buat Notulen dengan Gemini Flash 2.5</p>
                                     <p className="text-sm text-[var(--color-text-secondary)]">
-                                        Setelah selesai, klik "Copy to AI" untuk menyalin transkrip beserta prompt ke clipboard.
+                                        Klik tombol "Buat Notulen (Gemini Flash 2.5)" di panel kanan. Notulen lengkap terstruktur akan langsung muncul dalam hitungan detik.
                                     </p>
                                 </div>
                             </li>
                             <li className="flex gap-3">
                                 <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[var(--color-accent-primary)] text-white text-xs font-bold shrink-0">4</span>
                                 <div>
-                                    <p className="font-medium">Paste ke AI</p>
+                                    <p className="font-medium">Salin atau Unduh Notulen</p>
                                     <p className="text-sm text-[var(--color-text-secondary)]">
-                                        Buka Gemini atau ChatGPT, paste, dan dapatkan ringkasan dalam format Markdown profesional.
+                                        Salin hasil notulen dalam format Markdown untuk Notion/Obsidian, atau unduh sebagai berkas <code>.md</code>. Anda juga bisa beralih ke tab "Salin Manual" jika ingin mem-paste ke ChatGPT atau Claude.
                                     </p>
                                 </div>
                             </li>
@@ -81,42 +81,42 @@ export default function HelpModal({ isOpen, onClose }) {
                     {/* Features */}
                     <section>
                         <h3 className="text-sm font-bold text-[var(--color-accent-primary)] uppercase tracking-wide mb-3">
-                            Fitur Utama
+                            Fitur Unggulan
                         </h3>
                         <div className="grid gap-3">
                             <div className="flex items-start gap-3 p-3 rounded-xl bg-[var(--color-bg-tertiary)]">
                                 <Mic className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
                                 <div>
-                                    <p className="font-medium text-[var(--color-text-primary)]">Rekaman Langsung</p>
+                                    <p className="font-medium text-[var(--color-text-primary)]">Transkripsi Suara Real-time</p>
                                     <p className="text-sm text-[var(--color-text-secondary)]">
-                                        Transkripsi real-time dengan Web Speech API (gratis). Pause/Resume kapan saja.
+                                        Mendukung Web Speech API dengan auto-restart, jeda (pause/resume), dan multi-bahasa.
                                     </p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3 p-3 rounded-xl bg-[var(--color-bg-tertiary)]">
                                 <Bookmark className="w-5 h-5 text-yellow-400 shrink-0 mt-0.5" />
                                 <div>
-                                    <p className="font-medium text-[var(--color-text-primary)]">Tandai Momen</p>
+                                    <p className="font-medium text-[var(--color-text-primary)]">Penanda Momen Cerdas</p>
                                     <p className="text-sm text-[var(--color-text-secondary)]">
-                                        Klik "Tandai" untuk menandai bagian penting seperti "Diskusi Budget"
+                                        Tandai topik penting agar diprioritaskan oleh AI dalam penyusunan keputusan dan action items.
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-3 p-3 rounded-xl bg-[var(--color-bg-tertiary)]">
+                                <ExternalLink className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
+                                <div>
+                                    <p className="font-medium text-[var(--color-text-primary)]">Gemini 2.5 Flash Bawaan</p>
+                                    <p className="text-sm text-[var(--color-text-secondary)]">
+                                        Menghasilkan notulen otomatis langsung dalam web app menggunakan API gratis dari Google AI Studio.
                                     </p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3 p-3 rounded-xl bg-[var(--color-bg-tertiary)]">
                                 <Copy className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
                                 <div>
-                                    <p className="font-medium text-[var(--color-text-primary)]">Copy to AI</p>
+                                    <p className="font-medium text-[var(--color-text-primary)]">Dual-Mode: Langsung & Salin Manual</p>
                                     <p className="text-sm text-[var(--color-text-secondary)]">
-                                        Salin transkrip + prompt siap pakai untuk Gemini/ChatGPT
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="flex items-start gap-3 p-3 rounded-xl bg-[var(--color-bg-tertiary)]">
-                                <ExternalLink className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
-                                <div>
-                                    <p className="font-medium text-[var(--color-text-primary)]">Output Markdown</p>
-                                    <p className="text-sm text-[var(--color-text-secondary)]">
-                                        Hasil ringkasan dalam format .md siap copy ke Obsidian atau Notion
+                                        Bebas pilih membuat notulen langsung via Gemini API atau menyalin prompt transkrip ke ChatGPT / Claude.
                                     </p>
                                 </div>
                             </div>
@@ -130,10 +130,9 @@ export default function HelpModal({ isOpen, onClose }) {
                         </h3>
                         <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20">
                             <ul className="space-y-2 text-sm text-[var(--color-text-primary)]">
-                                <li>✓ <strong>100% Offline</strong> - Tidak ada API key yang diperlukan</li>
-                                <li>✓ <strong>Tidak ada audio yang disimpan</strong> - hanya teks transkrip</li>
-                                <li>✓ <strong>Semua data di browser</strong> - tidak ada server pihak ketiga</li>
-                                <li>✓ <strong>Anda yang kontrol</strong> - pilih sendiri mau paste ke AI mana</li>
+                                <li>✓ <strong>Privasi Kunci API</strong> - Gemini API Key disimpan secara lokal di browser Anda (LocalStorage).</li>
+                                <li>✓ <strong>Tidak ada audio yang disimpan ke server</strong> - hanya teks transkrip lokal di memori browser.</li>
+                                <li>✓ <strong>Koneksi Langsung ke Google AI</strong> - permintaan AI dikirim langsung dari browser Anda ke Google AI Studio tanpa perantara server ketiga.</li>
                             </ul>
                         </div>
                     </section>
@@ -141,13 +140,12 @@ export default function HelpModal({ isOpen, onClose }) {
                     {/* Tips */}
                     <section>
                         <h3 className="text-sm font-bold text-[var(--color-accent-primary)] uppercase tracking-wide mb-3">
-                            Tips
+                            Tips Penggunaan
                         </h3>
                         <ul className="space-y-2 text-sm text-[var(--color-text-secondary)]">
-                            <li>💡 Gunakan Chrome atau Edge untuk hasil transkripsi terbaik</li>
-                            <li>💡 Bicara dengan jelas dan dekat dengan mikrofon</li>
-                            <li>💡 Tandai momen penting saat ada keputusan atau action item</li>
-                            <li>💡 Gunakan "Copy Raw" jika ingin menyalin tanpa prompt</li>
+                            <li>💡 Gunakan browser Google Chrome atau Microsoft Edge untuk akurasi pengenalan suara terbaik.</li>
+                            <li>💡 Jika belum memiliki Gemini API Key, buka menu Pengaturan (⚙️) dan klik "Dapatkan Kunci Gratis" di Google AI Studio.</li>
+                            <li>💡 Bila transkrip sangat panjang, Gemini Flash 2.5 memiliki konteks token besar sehingga mampu merangkum rapat berdurasi panjang.</li>
                         </ul>
                     </section>
                 </div>
@@ -155,7 +153,7 @@ export default function HelpModal({ isOpen, onClose }) {
                 {/* Footer */}
                 <div className="p-4 border-t border-[var(--color-border)] text-center">
                     <p className="text-sm text-[var(--color-text-secondary)]">
-                        MeetingGenius v2.0 • Offline Meeting Transcriber
+                        MeetingGenius Pro v2.5 • AI Meeting Transcriber & Notulen
                     </p>
                 </div>
             </div>

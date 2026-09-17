@@ -3,27 +3,27 @@ import Header from './components/Header';
 import RecorderPanel from './components/RecorderPanel';
 import CopyToAIPanel from './components/CopyToAIPanel';
 import HelpModal from './components/HelpModal';
+import SettingsModal from './components/SettingsModal';
 import { useSpeechRecognition } from './hooks/useSpeechRecognition';
 import { useTheme } from './hooks/useTheme';
-
-// Simplified settings for offline mode
-const DEFAULT_SETTINGS = {
-  language: 'id-ID'
-};
+import { DEFAULT_SETTINGS } from './constants/schema';
 
 export default function App() {
   // Theme
   const { theme, cycleTheme } = useTheme();
 
-  // Settings (simplified - only language)
+  // Settings (Language, Gemini API Key, Gemini Model)
   const [settings, setSettings] = useState(() => {
     const savedSettings = localStorage.getItem('meeting_genius_settings');
     if (savedSettings) {
       try {
         const parsed = JSON.parse(savedSettings);
-        return { ...DEFAULT_SETTINGS, language: parsed.language || 'id-ID' };
-      } catch (e) {
-        console.error('Failed to parse settings:', e);
+        return {
+          ...DEFAULT_SETTINGS,
+          ...parsed
+        };
+      } catch {
+        // Use defaults if corrupted
       }
     }
     return DEFAULT_SETTINGS;
@@ -31,6 +31,7 @@ export default function App() {
 
   // UI State
   const [showHelp, setShowHelp] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   // Speech Recognition Hook
   const {
@@ -59,6 +60,18 @@ export default function App() {
     }
   }, [transcript]);
 
+  // Handle saving new settings
+  const handleSaveSettings = (newSettings) => {
+    setSettings(newSettings);
+    localStorage.setItem('meeting_genius_settings', JSON.stringify(newSettings));
+  };
+
+  // Handle quick language switch from header
+  const handleLanguageChange = (newLanguage) => {
+    const updated = { ...settings, language: newLanguage };
+    handleSaveSettings(updated);
+  };
+
   // Clear all data
   const handleClearAll = () => {
     clearTranscript();
@@ -72,13 +85,25 @@ export default function App() {
         isPaused={isPaused}
         theme={theme}
         cycleTheme={cycleTheme}
+        language={settings.language}
+        onLanguageChange={handleLanguageChange}
+        onSettingsClick={() => setShowSettings(true)}
         onHelpClick={() => setShowHelp(true)}
+        hasApiKey={Boolean(settings.geminiApiKey)}
       />
 
       {/* Help Modal */}
       <HelpModal
         isOpen={showHelp}
         onClose={() => setShowHelp(false)}
+      />
+
+      {/* Settings Modal */}
+      <SettingsModal
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+        settings={settings}
+        onSaveSettings={handleSaveSettings}
       />
 
       {/* Main Content */}
@@ -105,9 +130,15 @@ export default function App() {
             </div>
           </div>
 
-          {/* Right Column: Copy to AI */}
+          {/* Right Column: AI Notulen & Copy Panel */}
           <div className="min-h-[500px]">
-            <CopyToAIPanel transcript={transcript} />
+            <CopyToAIPanel
+              transcript={transcript}
+              apiKey={settings.geminiApiKey}
+              model={settings.geminiModel}
+              language={settings.language}
+              onOpenSettings={() => setShowSettings(true)}
+            />
           </div>
         </div>
       </main>

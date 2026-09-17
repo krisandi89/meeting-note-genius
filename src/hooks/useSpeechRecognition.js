@@ -13,8 +13,18 @@ export function useSpeechRecognition(language = 'bilingual') {
     const [isPaused, setIsPaused] = useState(false);
     const [transcript, setTranscript] = useState([]);
     const [currentInterim, setCurrentInterim] = useState('');
-    const [isSupported, setIsSupported] = useState(true);
-    const [error, setError] = useState('');
+    const checkBrowserSupport = () => {
+        if (typeof window === 'undefined') return false;
+        return ('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window);
+    };
+
+    const isInitiallySupported = checkBrowserSupport();
+    const [isSupported] = useState(isInitiallySupported);
+    const [error, setError] = useState(
+        isInitiallySupported
+            ? ''
+            : 'Browser Anda tidak mendukung fitur Speech-to-Text. Gunakan Google Chrome atau Edge.'
+    );
 
     const recognitionRef = useRef(null);
     const shouldRecordRef = useRef(false);
@@ -39,19 +49,14 @@ export function useSpeechRecognition(language = 'bilingual') {
         }
     }, [language]);
 
-    // Check browser support
+    // Cleanup on unmount
     useEffect(() => {
-        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-            setIsSupported(false);
-            setError('Browser Anda tidak mendukung fitur Speech-to-Text. Gunakan Google Chrome atau Edge.');
-        }
-
         return () => {
             shouldRecordRef.current = false;
             if (recognitionRef.current) {
                 try {
                     recognitionRef.current.stop();
-                } catch (e) {
+                } catch {
                     // Ignore
                 }
             }
@@ -62,6 +67,8 @@ export function useSpeechRecognition(language = 'bilingual') {
     const getCurrentTime = useCallback(() => {
         return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     }, []);
+
+    const initRecognitionRef = useRef(null);
 
     // Initialize recognition with current language
     const initRecognition = useCallback(() => {
@@ -126,14 +133,14 @@ export function useSpeechRecognition(language = 'bilingual') {
             if (shouldRecordRef.current && !isPaused) {
                 try {
                     setTimeout(() => {
-                        if (shouldRecordRef.current) {
+                        if (shouldRecordRef.current && initRecognitionRef.current) {
                             // Create new recognition with possibly alternated language
-                            const newRecognition = initRecognition();
+                            const newRecognition = initRecognitionRef.current();
                             recognitionRef.current = newRecognition;
                             newRecognition.start();
                         }
                     }, 100);
-                } catch (e) {
+                } catch {
                     console.log("Attempting to restart recognition...");
                 }
             } else if (!shouldRecordRef.current) {
@@ -143,6 +150,10 @@ export function useSpeechRecognition(language = 'bilingual') {
 
         return recognition;
     }, [language, getCurrentLanguage, alternateLanguage, getCurrentTime, isPaused]);
+
+    useEffect(() => {
+        initRecognitionRef.current = initRecognition;
+    }, [initRecognition]);
 
     // Start recording
     const start = useCallback(() => {
@@ -181,7 +192,7 @@ export function useSpeechRecognition(language = 'bilingual') {
         if (recognitionRef.current) {
             try {
                 recognitionRef.current.stop();
-            } catch (e) {
+            } catch {
                 // Ignore
             }
         }
@@ -199,7 +210,7 @@ export function useSpeechRecognition(language = 'bilingual') {
             shouldRecordRef.current = false;
             try {
                 recognitionRef.current.stop();
-            } catch (e) {
+            } catch {
                 // Ignore
             }
         }
