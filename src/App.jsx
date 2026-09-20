@@ -89,6 +89,8 @@ export default function App() {
         onLanguageChange={handleLanguageChange}
         onSettingsClick={() => setShowSettings(true)}
         onHelpClick={() => setShowHelp(true)}
+        aiProvider={settings.aiProvider}
+        ollamaModel={settings.ollamaModel}
         hasApiKey={Boolean(settings.geminiApiKey)}
       />
 
@@ -134,8 +136,11 @@ export default function App() {
           <div className="min-h-[500px]">
             <CopyToAIPanel
               transcript={transcript}
+              aiProvider={settings.aiProvider}
               apiKey={settings.geminiApiKey}
-              model={settings.geminiModel}
+              geminiModel={settings.geminiModel}
+              ollamaEndpoint={settings.ollamaEndpoint}
+              ollamaModel={settings.ollamaModel}
               language={settings.language}
               onOpenSettings={() => setShowSettings(true)}
             />

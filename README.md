@@ -1,31 +1,33 @@
-# MeetingGenius Pro v2.5
+# MeetingGenius Pro v3.0
 
-**AI-Powered Live Meeting Transcription & Instant Notes Generator**
+**AI-Powered Live Meeting Transcription & Instant Notes Generator (Hybrid: Gemini Flash & Ollama Local AI)**
 
-![MeetingGenius Pro](https://img.shields.io/badge/Version-2.5.0-blue) ![React](https://img.shields.io/badge/React-19-61DAFB) ![Vite](https://img.shields.io/badge/Vite-7-646CFF) ![Tailwind](https://img.shields.io/badge/Tailwind-4-38B2AC) ![Gemini](https://img.shields.io/badge/Gemini-2.5_Flash-orange)
+![MeetingGenius Pro](https://img.shields.io/badge/Version-3.0.0-blue) ![React](https://img.shields.io/badge/React-19-61DAFB) ![Vite](https://img.shields.io/badge/Vite-7-646CFF) ![Tailwind](https://img.shields.io/badge/Tailwind-4-38B2AC) ![Ollama](https://img.shields.io/badge/Local_AI-Ollama_Qwen2.5-emerald) ![Gemini](https://img.shields.io/badge/Cloud_AI-Gemini_2.5_Flash-orange)
 
-MeetingGenius Pro adalah aplikasi web modern untuk merekam, mentranskripsikan pembicaraan rapat secara *real-time*, dan langsung menghasilkan **Notulen Rapat Lengkap (Meeting Minutes)** terstruktur profesional menggunakan model kecerdasan buatan terbaru **Google Gemini 2.5 Flash** (dengan API gratis dari Google AI Studio).
+MeetingGenius Pro adalah aplikasi web modern untuk merekam, mentranskripsikan pembicaraan rapat secara *real-time*, dan langsung menghasilkan **Notulen Rapat Lengkap (Meeting Minutes)** terstruktur profesional. Aplikasi ini mendukung arsitektur **Hybrid Dual-Engine**:
+1. 💻 **Ollama Local AI (MacBook M2)**: 100% offline, privat, tanpa internet, langsung diproses oleh chip Apple Silicon M2 Anda menggunakan model **Qwen 2.5 (3B)**.
+2. 🌐 **Google Gemini 2.5 Flash (Cloud)**: Respons instan berbasis cloud dengan Google AI Studio API gratis.
 
 ---
 
-## 🚀 Fitur Utama
+## 🚀 Fitur Unggulan
 
-- 🎙️ **Transkripsi Suara Real-time** - Pengenalan suara langsung menggunakan Web Speech API dengan auto-reconnect dan deteksi suara terus-menerus.
+- 🎙️ **Transkripsi Suara Real-time** - Web Speech API lokal dengan auto-reconnect, deteksi jeda, dan penanda momen (*bookmark*).
 - 🌐 **Pemilih Bahasa Rapat Cepat** - Ganti bahasa rapat langsung dari Header (🇮🇩 Bahasa Indonesia `id-ID`, 🇺🇸 English `en-US`, atau 🌐 Bilingual `ID + EN`).
-- ⏸️ **Jeda & Lanjutkan (Pause/Resume)** - Kontrol rekaman rapat tanpa kehilangan konteks transkrip.
-- 🔖 **Penanda Momen (Bookmark)** - Beri tanda pada momen krusial (misal: *"Diskusi Anggaran"*, *"Keputusan Direksi"*), yang otomatis dijadikan fokus prioritas oleh AI.
-- ⚡ **Notulen Langsung dengan Gemini 2.5 Flash** - Buat notulen rapat komprehensif langsung di dalam aplikasi dalam hitungan detik tanpa perlu membuka aplikasi lain.
-- 📋 **Dual Mode (Otomatis & Salin Manual)** - Tersedia tab **Gemini Flash** (otomatis via API) serta tab **Salin Manual** (prompt siap pakai untuk ChatGPT / Claude).
-- 📥 **Ekspor & Unduh Mudah** - Salin format Markdown siap pakai untuk Notion/Obsidian atau unduh langsung sebagai file `.md` dan `.txt`.
-- 🔒 **Privasi Terjamin & 100% Client-Side** - Kunci API dan transkrip disimpan lokal di memori peramban Anda (`localStorage`), tidak ada perantara backend server.
-- 🌙 **Tema Gelap / Terang / Sistem** - Antarmuka modern *glassmorphism* yang nyaman di mata dengan pendeteksi otomatis preferensi OS.
-- 🍏 **Peluncur Cepat macOS (`start.command`)** - Cukup klik dua kali file `start.command` untuk langsung menjalankan server dan membuka peramban otomatis.
+- 💻 **Ollama Local AI (MacBook M2)** - Jalankan notulen rapat secara offline dan 100% privat menggunakan model **Qwen 2.5 3B** (paling fasih Bahasa Indonesia untuk model ringkas).
+- 🌐 **Google Gemini 2.5 Flash** - Buat notulen rapat instan via Google AI Studio API gratis.
+- 🔄 **Pengganti Engine Fleksibel** - Pilih bebas antara mode Local M2 atau Cloud Gemini di menu Pengaturan (⚙️).
+- 📋 **Dual Mode UI** - Tab otomatis (Gemini / Ollama) dan Tab salin manual (prompt siap tempel ke ChatGPT / Claude).
+- 📥 **Ekspor Mudah** - Salin format Markdown siap pakai untuk Notion/Obsidian atau unduh langsung berkas `.md`.
+- 🔒 **Privasi Mutlak** - Kunci API dan transkrip disimpan lokal di browser Anda (`localStorage`), tidak ada perantara backend server.
+- 🌙 **Tema Gelap / Terang / Sistem** - Antarmuka modern *glassmorphism* yang responsif.
+- 🍏 **Peluncur Otomatis macOS (`start.command`)** - Klik dua kali file `start.command` untuk langsung menjalankan service Ollama, server Vite, dan membuka browser otomatis.
 
 ---
 
-## 📋 Struktur Notulen yang Dihasilkan
+## 📋 Format Notulen yang Dihasilkan
 
-AI menyusun notulen rapat secara mendalam dengan format Markdown profesional:
+AI menyusun notulen secara mendalam dan terstruktur:
 1. **Judul Rapat Spesifik & Tanggal Pelaksanaan**
 2. **Ringkasan Eksekutif** (2-3 paragraf intisari rapat)
 3. **Poin-poin Diskusi Utama** (Terinci dengan topik dan argumen)
@@ -36,81 +38,70 @@ AI menyusun notulen rapat secara mendalam dengan format Markdown profesional:
 
 ---
 
-## ⚡ Panduan Cepat (Quick Start)
+## ⚡ Panduan Setup Ollama Local AI (MacBook M2)
 
-### 1. Dapatkan Gemini API Key Gratis
-1. Kunjungi [Google AI Studio (aistudio.google.com/apikey)](https://aistudio.google.com/apikey).
-2. Buat API Key gratis (Free Tier).
-3. Salin API Key Anda.
+Untuk menjalankan AI secara lokal di MacBook Anda:
 
-### 2. Jalankan Aplikasi
-Di macOS:
-- Cukup **klik dua kali** file `start.command` di folder proyek ini.
-
-Atau melalui Terminal:
+### 1. Install & Jalankan Ollama
+Ollama sudah terpasang di Mac melalui Homebrew:
 ```bash
-# Pasang dependensi
-npm install
-
-# Jalankan server pengembangan
-npm run dev
+# Jalankan service Ollama di latar belakang
+brew services start ollama
 ```
 
-Buka peramban di `http://localhost:5173` (Gunakan **Google Chrome** atau **Microsoft Edge** untuk performa Web Speech API terbaik).
+### 2. Download Model Rekomendasi (Qwen 2.5 3B)
+```bash
+# Unduh model yang paling fasih Bahasa Indonesia (~2.0 GB)
+ollama pull qwen2.5:3b
+```
 
-### 3. Masukkan API Key di Aplikasi
-1. Klik tombol **⚙️ Pengaturan** di bagian kanan atas (Header).
-2. Tempelkan Google Gemini API Key Anda.
-3. Klik **"Tes Koneksi Kunci"** untuk memastikan API aktif.
-4. Klik **"Simpan Pengaturan"**.
-
-### 4. Mulai Rapat & Generate Notulen
-1. Pilih bahasa rapat di Header (`🇮🇩 ID` atau `🇺🇸 EN`).
-2. Klik tombol **"Mulai Meeting"** dan izinkan akses mikrofon.
-3. Gunakan tombol **"Tandai"** jika ada keputusan atau topik penting.
-4. Klik **"Stop"** setelah rapat selesai.
-5. Di panel kanan, klik **"✨ Buat Notulen (Gemini Flash 2.5)"**.
-6. Notulen akan langsung tersusun rapi! Anda bisa klik **"Salin Notulen (.md)"** atau **"Unduh File .md"**.
+### 3. Izinkan Koneksi Web App (CORS)
+Agar browser dan web app Vercel (`https://meeting-genius-seven.vercel.app/`) dapat memanggil Ollama di laptop Anda:
+```bash
+launchctl setenv OLLAMA_ORIGINS "*"
+```
 
 ---
 
-## 🌐 Kompatibilitas Peramban (Browser Support)
+## ⚡ Panduan Setup Google Gemini Flash (Cloud)
 
-| Peramban | Status Web Speech API | Rekomendasi |
-|---|---|---|
-| **Google Chrome** | ✅ Mendukung Penuh | ⭐️ Sangat Direkomendasikan |
-| **Microsoft Edge** | ✅ Mendukung Penuh | ⭐️ Sangat Direkomendasikan |
-| **Brave / Opera** | ✅ Mendukung (Chromium) | Direkomendasikan |
-| **Mozilla Firefox** | ⚠️ Terbatas | Gunakan fitur "Impor Transkrip Manual" |
-| **Apple Safari** | ⚠️ Terbatas | Gunakan fitur "Impor Transkrip Manual" |
+1. Kunjungi [Google AI Studio (aistudio.google.com/apikey)](https://aistudio.google.com/apikey).
+2. Buat API Key gratis.
+3. Di web app, klik menu **⚙️ Pengaturan**, pilih **Google Gemini (Cloud)**, tempelkan API Key, lalu klik **Simpan Pengaturan**.
+
+---
+
+## 💻 Menjalankan Aplikasi Secara Lokal
+
+Cukup **klik dua kali** file `start.command` di folder proyek ini (script ini otomatis menyalakan Ollama dan server web).
+
+Atau via Terminal:
+```bash
+npm install
+npm run dev
+```
+
+Buka peramban di `http://localhost:5173` (Gunakan **Google Chrome** atau **Microsoft Edge**).
+
+---
+
+## 🌐 Akses Online (Vercel)
+
+Aplikasi juga dapat diakses langsung via web di:
+👉 **[https://meeting-genius-seven.vercel.app/](https://meeting-genius-seven.vercel.app/)**
+
+*Catatan: Saat menggunakan Ollama Local AI melalui web Vercel, pastikan Ollama di MacBook Anda sedang berjalan.*
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Framework:** React 19 + Vite 7
-- **Styling:** Tailwind CSS 4 (`@tailwindcss/vite`) + Custom Glassmorphism CSS
+- **Frontend:** React 19 + Vite 7
+- **Styling:** Tailwind CSS 4 (`@tailwindcss/vite`)
 - **Icons:** Lucide React
-- **AI Engine:** Google Gemini 2.5 Flash REST API (Direct client-to-API via Google AI Studio)
-- **Speech Engine:** Web Speech API (`webkitSpeechRecognition` / `SpeechRecognition`)
-
----
-
-## 📜 Skrip Proyek
-
-```bash
-# Menjalankan dev server
-npm run dev
-
-# Memeriksa kualitas kode & ESLint (0 errors)
-npm run lint
-
-# Membangun versi produksi
-npm run build
-
-# Meninjau build produksi lokal
-npm run preview
-```
+- **Local AI:** Ollama API (`qwen2.5:3b`) running on Apple Silicon Metal GPU
+- **Cloud AI:** Google Gemini 2.5 Flash REST API
+- **Speech Engine:** Web Speech API
 
 ---
 

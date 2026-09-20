@@ -12,8 +12,12 @@ export default function Header({
     language,
     onLanguageChange,
     onSettingsClick,
+    aiProvider = 'gemini',
+    ollamaModel = 'qwen2.5:3b',
     hasApiKey
 }) {
+    const isOllamaActive = aiProvider === 'ollama';
+
     return (
         <header className="glass sticky top-0 z-40 px-4 md:px-6 py-3 flex items-center justify-between gap-2">
             {/* Logo & Brand */}
@@ -47,6 +51,29 @@ export default function Header({
 
             {/* Right: Actions */}
             <div className="flex items-center gap-1.5 md:gap-2">
+                {/* Active AI Provider Badge */}
+                <button
+                    onClick={onSettingsClick}
+                    className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                        isOllamaActive
+                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20'
+                            : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 hover:bg-indigo-500/20'
+                    }`}
+                    title={`Engine AI Aktif: ${isOllamaActive ? `Ollama Local (${ollamaModel})` : 'Google Gemini Flash'}. Klik untuk mengganti.`}
+                >
+                    {isOllamaActive ? (
+                        <>
+                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                            <span>💻 Local M2</span>
+                        </>
+                    ) : (
+                        <>
+                            <span className="w-2 h-2 rounded-full bg-indigo-400" />
+                            <span>🌐 Gemini</span>
+                        </>
+                    )}
+                </button>
+
                 {/* Language Selector Dropdown */}
                 <div className="relative flex items-center">
                     <div className="flex items-center gap-1.5 bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] rounded-lg px-2.5 py-1.5 text-xs text-[var(--color-text-primary)] hover:border-[var(--color-accent-primary)] transition-all">
@@ -77,14 +104,14 @@ export default function Header({
                     className="relative p-2 rounded-lg text-[var(--color-text-secondary)] 
                    hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)]
                    transition-all"
-                    title="Pengaturan Gemini AI"
+                    title="Pengaturan AI & Aplikasi"
                     aria-label="Pengaturan"
                 >
                     <Settings className="w-5 h-5" />
-                    {hasApiKey && (
+                    {(isOllamaActive || hasApiKey) && (
                         <span
                             className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-[var(--color-bg-primary)]"
-                            title="Gemini API Key Aktif"
+                            title={isOllamaActive ? "Ollama Local Aktif" : "Gemini API Key Aktif"}
                         />
                     )}
                 </button>

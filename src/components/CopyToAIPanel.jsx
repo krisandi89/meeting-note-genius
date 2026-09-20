@@ -9,9 +9,11 @@ import {
     RefreshCw,
     AlertCircle,
     Settings,
-    Layers
+    Layers,
+    HardDrive
 } from 'lucide-react';
 import { generateMeetingNotes } from '../services/geminiService';
+import { generateMeetingNotesLocal } from '../services/ollamaService';
 
 const AI_PROMPT = `Berikut adalah transkrip meeting saya. Tolong buatkan ringkasan dalam format Markdown (.md) yang profesional dan bisa langsung di-copy ke Obsidian atau Notion.
 
@@ -54,12 +56,15 @@ TRANSKRIP MEETING:
 
 export default function CopyToAIPanel({
     transcript,
-    apiKey,
-    model = 'gemini-2.5-flash',
+    aiProvider = 'gemini',
+    apiKey = '',
+    geminiModel = 'gemini-2.5-flash',
+    ollamaEndpoint = 'http://localhost:11434',
+    ollamaModel = 'qwen2.5:3b',
     language = 'id-ID',
     onOpenSettings
 }) {
-    const [activeTab, setActiveTab] = useState('gemini'); // 'gemini' | 'manual'
+    const [activeTab, setActiveTab] = useState('ai'); // 'ai' | 'manual'
     const [generating, setGenerating] = useState(false);
     const [notes, setNotes] = useState('');
     const [usedModel, setUsedModel] = useState('');
@@ -87,10 +92,11 @@ export default function CopyToAIPanel({
             .reduce((acc, t) => acc + (t.text?.split(' ').length || 0), 0)
         : 0;
 
-    // Generate notulen with Gemini Flash
+    // Generate notulen based on active AI provider
     const handleGenerateNotes = async () => {
         if (!hasTranscript) return;
-        if (!apiKey) {
+
+        if (aiProvider === 'gemini' && !apiKey) {
             onOpenSettings?.();
             return;
         }
@@ -99,15 +105,25 @@ export default function CopyToAIPanel({
         setError('');
 
         try {
-            const result = await generateMeetingNotes({
-                transcript,
-                apiKey,
-                model,
-                language
-            });
-
-            setNotes(result.text);
-            setUsedModel(result.modelUsed);
+            if (aiProvider === 'ollama') {
+                const result = await generateMeetingNotesLocal({
+                    transcript,
+                    endpoint: ollamaEndpoint,
+                    model: ollamaModel,
+                    language
+                });
+                setNotes(result.text);
+                setUsedModel(result.modelUsed);
+            } else {
+                const result = await generateMeetingNotes({
+                    transcript,
+                    apiKey,
+                    model: geminiModel,
+                    language
+                });
+                setNotes(result.text);
+                setUsedModel(result.modelUsed);
+            }
         } catch (err) {
             setError(err.message || 'Gagal membuat notulen rapat.');
         } finally {
@@ -165,21 +181,32 @@ export default function CopyToAIPanel({
         }
     };
 
+    const isOllama = aiProvider === 'ollama';
+
     return (
         <div className="flex flex-col h-full glass rounded-2xl overflow-hidden border border-[var(--color-border)]">
             {/* Header with Tabs */}
             <div className="flex items-center justify-between p-3 border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)]/50">
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                     <button
-                        onClick={() => setActiveTab('gemini')}
+                        onClick={() => setActiveTab('ai')}
                         className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                            activeTab === 'gemini'
+                            activeTab === 'ai'
                                 ? 'bg-[var(--color-accent-primary)] text-white shadow-sm'
                                 : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)]'
                         }`}
                     >
-                        <Sparkles className="w-3.5 h-3.5" />
-                        Gemini Flash 2.5
+                        {isOllama ? (
+                            <>
+                                <HardDrive className="w-3.5 h-3.5" />
+                                <span>Ollama Local ({ollamaModel})</span>
+                            </>
+                        ) : (
+                            <>
+                                <Sparkles className="w-3.5 h-3.5" />
+                                <span>Gemini Flash 2.5</span>
+                            </>
+                        )}
                     </button>
                     <button
                         onClick={() => setActiveTab('manual')}
@@ -201,8 +228,8 @@ export default function CopyToAIPanel({
                 )}
             </div>
 
-            {/* TAB 1: GEMINI FLASH 2.5 DIRECT NOTULEN */}
-            {activeTab === 'gemini' && (
+            {/* TAB 1: AI GENERATION (GEMINI CLOUD OR OLLAMA LOCAL) */}
+            {activeTab === 'ai' && (
                 <div className="flex flex-col flex-1 overflow-hidden">
                     {/* Main Content Area */}
                     <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -210,7 +237,11 @@ export default function CopyToAIPanel({
                         {!hasTranscript && (
                             <div className="h-full flex flex-col items-center justify-center text-center py-12">
                                 <div className="w-16 h-16 rounded-2xl bg-[var(--color-bg-tertiary)] flex items-center justify-center mb-3">
-                                    <Sparkles className="w-8 h-8 text-[var(--color-accent-primary)] opacity-40" />
+                                    {isOllama ? (
+                                        <HardDrive className="w-8 h-8 text-emerald-400 opacity-50" />
+                                    ) : (
+                                        <Sparkles className="w-8 h-8 text-[var(--color-accent-primary)] opacity-50" />
+                                    )}
                                 </div>
                                 <p className="font-semibold text-sm text-[var(--color-text-primary)]">
                                     Belum Ada Transkrip Rapat
@@ -221,8 +252,8 @@ export default function CopyToAIPanel({
                             </div>
                         )}
 
-                        {/* If has transcript but no API Key */}
-                        {hasTranscript && !apiKey && !notes && (
+                        {/* If has transcript but Gemini API Key missing */}
+                        {hasTranscript && !isOllama && !apiKey && !notes && (
                             <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs space-y-3">
                                 <div className="flex items-start gap-2.5">
                                     <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
@@ -231,7 +262,7 @@ export default function CopyToAIPanel({
                                             Google Gemini API Key Diperlukan
                                         </p>
                                         <p className="text-[var(--color-text-secondary)] mt-1">
-                                            Masukkan API Key gratis dari Google AI Studio untuk membuat notulen rapat langsung di dalam aplikasi.
+                                            Masukkan API Key gratis dari Google AI Studio atau beralih ke <strong>Ollama Local AI</strong> jika ingin 100% offline.
                                         </p>
                                     </div>
                                 </div>
@@ -240,18 +271,26 @@ export default function CopyToAIPanel({
                                     className="w-full py-2 px-3 rounded-lg bg-amber-500 text-slate-900 font-semibold hover:bg-amber-400 transition-all flex items-center justify-center gap-1.5"
                                 >
                                     <Settings className="w-3.5 h-3.5" />
-                                    Atur Gemini API Key Sekarang
+                                    Atur Gemini API Key / Ganti ke Local AI
                                 </button>
                             </div>
                         )}
 
                         {/* Error Message */}
                         {error && (
-                            <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-xs flex items-start gap-2 text-red-400">
+                            <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-xs flex items-start gap-2 text-red-400">
                                 <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-                                <div>
+                                <div className="space-y-1.5">
                                     <p className="font-semibold">Gagal Menghasilkan Notulen</p>
-                                    <p className="mt-0.5 opacity-90">{error}</p>
+                                    <p className="opacity-90 leading-relaxed">{error}</p>
+                                    {isOllama && (
+                                        <button
+                                            onClick={onOpenSettings}
+                                            className="text-xs font-medium text-emerald-400 hover:underline block pt-1"
+                                        >
+                                            Periksa Pengaturan Ollama →
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -260,15 +299,27 @@ export default function CopyToAIPanel({
                         {generating && (
                             <div className="h-full flex flex-col items-center justify-center text-center py-12 space-y-4 animate-fade-in">
                                 <div className="relative">
-                                    <div className="w-16 h-16 rounded-full border-4 border-[var(--color-accent-primary)]/20 border-t-[var(--color-accent-primary)] animate-spin" />
-                                    <Sparkles className="w-6 h-6 text-[var(--color-accent-primary)] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                                    <div className={`w-16 h-16 rounded-full border-4 ${
+                                        isOllama
+                                            ? 'border-emerald-500/20 border-t-emerald-500'
+                                            : 'border-[var(--color-accent-primary)]/20 border-t-[var(--color-accent-primary)]'
+                                    } animate-spin`} />
+                                    {isOllama ? (
+                                        <HardDrive className="w-6 h-6 text-emerald-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                                    ) : (
+                                        <Sparkles className="w-6 h-6 text-[var(--color-accent-primary)] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                                    )}
                                 </div>
                                 <div>
                                     <p className="font-semibold text-sm text-[var(--color-text-primary)]">
-                                        Gemini Flash sedang menyusun notulen...
+                                        {isOllama
+                                            ? `MacBook M2 (${ollamaModel}) sedang memproses notulen...`
+                                            : 'Gemini Flash sedang menyusun notulen...'}
                                     </p>
                                     <p className="text-xs text-[var(--color-text-secondary)] mt-1">
-                                        Menganalisis poin diskusi, keputusan, dan action items
+                                        {isOllama
+                                            ? 'Memproses data secara lokal di chip Apple Silicon M2'
+                                            : 'Menganalisis poin diskusi, keputusan, dan action items'}
                                     </p>
                                 </div>
                             </div>
@@ -278,9 +329,9 @@ export default function CopyToAIPanel({
                         {notes && !generating && (
                             <div className="space-y-3 animate-fade-in">
                                 <div className="flex items-center justify-between text-xs text-[var(--color-text-secondary)] pb-1 border-b border-[var(--color-border)]">
-                                    <span className="flex items-center gap-1 text-emerald-400 font-medium">
+                                    <span className="flex items-center gap-1.5 text-emerald-400 font-medium">
                                         <CheckCircle className="w-3.5 h-3.5" />
-                                        Notulen Selesai Dibuat ({usedModel || model})
+                                        Notulen Selesai Dibuat ({usedModel || (isOllama ? ollamaModel : geminiModel)})
                                     </span>
                                 </div>
 
@@ -293,14 +344,29 @@ export default function CopyToAIPanel({
                         )}
 
                         {/* Prompt ready placeholder if not yet generated */}
-                        {hasTranscript && !notes && !generating && apiKey && (
-                            <div className="p-4 rounded-xl bg-[var(--color-accent-primary)]/10 border border-[var(--color-accent-primary)]/20 space-y-2">
+                        {hasTranscript && !notes && !generating && (isOllama || apiKey) && (
+                            <div className={`p-4 rounded-xl border space-y-2 ${
+                                isOllama
+                                    ? 'bg-emerald-500/10 border-emerald-500/20'
+                                    : 'bg-[var(--color-accent-primary)]/10 border-[var(--color-accent-primary)]/20'
+                            }`}>
                                 <p className="text-sm font-semibold text-[var(--color-text-primary)] flex items-center gap-2">
-                                    <Sparkles className="w-4 h-4 text-[var(--color-accent-primary)]" />
-                                    Siap Diringkas dengan Gemini Flash
+                                    {isOllama ? (
+                                        <>
+                                            <HardDrive className="w-4 h-4 text-emerald-400" />
+                                            Siap Diproses dengan Ollama Local AI
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Sparkles className="w-4 h-4 text-[var(--color-accent-primary)]" />
+                                            Siap Diringkas dengan Gemini Flash
+                                        </>
+                                    )}
                                 </p>
                                 <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-                                    Transkrip siap dianalisis. Klik tombol di bawah untuk menghasilkan notulen rapat lengkap dengan Ringkasan Eksekutif, Poin Diskusi, Keputusan, dan Tabel Action Items.
+                                    {isOllama
+                                        ? `Transkrip akan diproses 100% lokal oleh chip M2 laptop Anda menggunakan model ${ollamaModel}.`
+                                        : 'Transkrip siap dianalisis. Klik tombol di bawah untuk menghasilkan notulen rapat lengkap secara instan.'}
                                 </p>
                             </div>
                         )}
@@ -312,12 +378,21 @@ export default function CopyToAIPanel({
                             <button
                                 onClick={handleGenerateNotes}
                                 disabled={!hasTranscript || generating}
-                                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold btn-primary disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                                className={`w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md ${
+                                    isOllama
+                                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-500 hover:to-teal-500'
+                                        : 'btn-primary'
+                                }`}
                             >
                                 {generating ? (
                                     <>
                                         <Loader2 className="w-5 h-5 animate-spin" />
                                         Menyusun Notulen...
+                                    </>
+                                ) : isOllama ? (
+                                    <>
+                                        <HardDrive className="w-5 h-5" />
+                                        💻 Buat Notulen (Ollama Local - Qwen 2.5)
                                     </>
                                 ) : (
                                     <>
@@ -334,7 +409,9 @@ export default function CopyToAIPanel({
                                         className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl font-semibold text-xs transition-all ${
                                             copiedNotes
                                                 ? 'bg-emerald-600 text-white'
-                                                : 'btn-primary'
+                                                : isOllama
+                                                    ? 'bg-emerald-600 hover:bg-emerald-500 text-white'
+                                                    : 'btn-primary'
                                         }`}
                                     >
                                         {copiedNotes ? (
