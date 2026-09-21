@@ -18,6 +18,14 @@ export default function App() {
     if (savedSettings) {
       try {
         const parsed = JSON.parse(savedSettings);
+        // Force upgrade legacy gemini models to gemini-2.5-flash
+        if (
+          !parsed.geminiModel ||
+          parsed.geminiModel === 'gemini-1.5-flash' ||
+          parsed.geminiModel === 'gemini-2.0-flash'
+        ) {
+          parsed.geminiModel = 'gemini-2.5-flash';
+        }
         return {
           ...DEFAULT_SETTINGS,
           ...parsed

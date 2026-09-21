@@ -18,9 +18,9 @@ export const SUPPORTED_LANGUAGES = [
 
 // Supported Gemini AI models
 export const GEMINI_MODELS = [
-    { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash (Rekomendasi Cloud)", fallback: "gemini-2.0-flash" },
-    { id: "gemini-2.0-flash", name: "Gemini 2.0 Flash", fallback: "gemini-1.5-flash" },
-    { id: "gemini-1.5-flash", name: "Gemini 1.5 Flash", fallback: null }
+    { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash (Default & Rekomendasi Utama)", fallback: "gemini-2.5-flash-lite" },
+    { id: "gemini-2.5-flash-lite", name: "Gemini 2.5 Flash Lite (Cepat & Hemat Token)", fallback: "gemini-1.5-flash" },
+    { id: "gemini-1.5-flash", name: "Gemini 1.5 Flash (Legacy Fallback)", fallback: null }
 ];
 
 // Supported Ollama local models (optimized for MacBook Air M2 8GB)

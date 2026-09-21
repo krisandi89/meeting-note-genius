@@ -59,7 +59,7 @@ export default function Header({
                             ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20'
                             : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 hover:bg-indigo-500/20'
                     }`}
-                    title={`Engine AI Aktif: ${isOllamaActive ? `Ollama Local (${ollamaModel})` : 'Google Gemini Flash'}. Klik untuk mengganti.`}
+                    title={`Engine AI Aktif: ${isOllamaActive ? `Ollama Local (${ollamaModel})` : 'Google Gemini 2.5 Flash'}. Klik untuk mengganti.`}
                 >
                     {isOllamaActive ? (
                         <>
@@ -69,7 +69,7 @@ export default function Header({
                     ) : (
                         <>
                             <span className="w-2 h-2 rounded-full bg-indigo-400" />
-                            <span>🌐 Gemini</span>
+                            <span>🌐 Gemini 2.5</span>
                         </>
                     )}
                 </button>

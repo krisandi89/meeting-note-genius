@@ -204,7 +204,7 @@ export default function CopyToAIPanel({
                         ) : (
                             <>
                                 <Sparkles className="w-3.5 h-3.5" />
-                                <span>Gemini Flash 2.5</span>
+                                <span>Gemini 2.5 Flash</span>
                             </>
                         )}
                     </button>
@@ -314,7 +314,7 @@ export default function CopyToAIPanel({
                                     <p className="font-semibold text-sm text-[var(--color-text-primary)]">
                                         {isOllama
                                             ? `MacBook M2 (${ollamaModel}) sedang memproses notulen...`
-                                            : 'Gemini Flash sedang menyusun notulen...'}
+                                            : 'Gemini 2.5 Flash sedang menyusun notulen...'}
                                     </p>
                                     <p className="text-xs text-[var(--color-text-secondary)] mt-1">
                                         {isOllama
@@ -359,7 +359,7 @@ export default function CopyToAIPanel({
                                     ) : (
                                         <>
                                             <Sparkles className="w-4 h-4 text-[var(--color-accent-primary)]" />
-                                            Siap Diringkas dengan Gemini Flash
+                                            Siap Diringkas dengan Gemini 2.5 Flash
                                         </>
                                     )}
                                 </p>
@@ -397,7 +397,7 @@ export default function CopyToAIPanel({
                                 ) : (
                                     <>
                                         <Sparkles className="w-5 h-5" />
-                                        ✨ Buat Notulen (Gemini Flash 2.5)
+                                        ✨ Buat Notulen (Gemini 2.5 Flash)
                                     </>
                                 )}
                             </button>
